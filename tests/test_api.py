@@ -1,4 +1,3 @@
-import os
 import time
 import pytest
 from fastapi.testclient import TestClient
@@ -31,7 +30,9 @@ def test_create_and_get_sentiment_task():
     r2 = client.get(f'/tasks/{task_id}')
     assert r2.status_code == 200
     j = r2.json()
-    assert j['status'] in ('SUCCESS', 'SUCCESS')
+    assert j['status'] in (
+        'SUCCESS',
+    )
     assert isinstance(j['result'], dict)
     assert 'polarity' in j['result']
 
