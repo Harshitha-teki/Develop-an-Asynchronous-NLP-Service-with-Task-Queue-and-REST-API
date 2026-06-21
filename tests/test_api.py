@@ -1,4 +1,3 @@
-import time
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
@@ -39,7 +38,11 @@ def test_create_and_get_sentiment_task():
 
 def test_keywords_task():
     client = TestClient(app)
-    payload = {"type": "keywords", "text": "apple banana apple fruit banana orange", "top_k": 2}
+    payload = {
+        "type": "keywords",
+        "text": "apple banana apple fruit banana orange",
+        "top_k": 2,
+    }
     r = client.post('/tasks', json=payload)
     assert r.status_code == 200
     task_id = r.json()['task_id']
