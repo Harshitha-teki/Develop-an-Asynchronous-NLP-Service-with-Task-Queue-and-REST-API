@@ -33,7 +33,17 @@ jobs:
           pip install -v -r requirements.txt
       - name: Run tests
         run: |
-          pytest -q
+          mkdir -p reports
+          # Save verbose pytest output and JUnit XML for debugging
+          pytest -q --junitxml=reports/junit.xml | tee pytest.log
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            reports
+            pytest.log
 
   integration:
     runs-on: ubuntu-latest
