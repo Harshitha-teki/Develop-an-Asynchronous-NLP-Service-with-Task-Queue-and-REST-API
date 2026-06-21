@@ -34,17 +34,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -v -r requirements.txt
       - name: Run tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        working-directory: ${{ github.workspace }}
         run: |
           mkdir -p reports
           echo "pwd: $(pwd)"
-          echo "workspace: $GITHUB_WORKSPACE"
-          echo "ls (root):"; ls -la
-          echo "ls workspace:"; ls -la "$GITHUB_WORKSPACE"
-          # Ensure PYTHONPATH points to the nested checkout folder (Actions checks out to $GITHUB_WORKSPACE/<repo>)
-          export PYTHONPATH="$GITHUB_WORKSPACE/$(basename "$GITHUB_WORKSPACE")"
-          echo "PYTHONPATH=$PYTHONPATH"
+          python -c "import sys; print(sys.path)"
           # Save verbose pytest output and JUnit XML for debugging
-          pytest -q --junitxml=reports/junit.xml | tee pytest.log
+          python -m pytest -q --junitxml=reports/junit.xml | tee pytest.log
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -92,9 +90,9 @@ jobs:
         env:
           CELERY_BROKER_URL: redis://localhost:6379/0
           CELERY_RESULT_BACKEND: redis://localhost:6379/0
+          PYTHONPATH: ${{ github.workspace }}
+        working-directory: ${{ github.workspace }}
         run: |
           echo "pwd: $(pwd)"
-          echo "workspace: $GITHUB_WORKSPACE"
-          export PYTHONPATH="$GITHUB_WORKSPACE/$(basename "$GITHUB_WORKSPACE")"
-          echo "PYTHONPATH=$PYTHONPATH"
-          pytest -q
+          python -c "import sys; print(sys.path)"
+          python -m pytest -q
