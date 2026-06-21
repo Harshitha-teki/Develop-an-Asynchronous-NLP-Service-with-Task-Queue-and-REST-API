@@ -4,6 +4,8 @@ This repository provides a minimal asynchronous NLP service using FastAPI for th
 
 Submission: last updated 2026-06-21
 
+Submission SHA: f40952a
+
 Features
 - Submit text-processing tasks (sentiment, keywords, tokenize) via REST API
 - Asynchronous task processing by a Celery worker
